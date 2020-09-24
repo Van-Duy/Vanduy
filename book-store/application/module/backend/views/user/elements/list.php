@@ -7,14 +7,14 @@ $arrMuti  = array('default' => "--Bulk Action--", "multi-active" => "Multi Activ
 $Muti     = Helper::creatStatus('bulk-action', 'custom-select custom-select-sm mr-1', $arrMuti, $this->arrParam["bulk-action"], 'width: unset', "bulk-action");
 
 // Colum
-$ID             = Html::creatFill('ID', 'ID', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Name           = Html::creatFill('Username', 'username', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Email          = Html::creatFill('Email', 'email', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Status         = Html::creatFill('Status', 'status', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Ordering       = Html::creatFill('Ordering', 'ordering', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Group_name     = Html::creatFill('Group', 'group_name', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Created        = Html::creatFill('Created', 'created', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Modified       = Html::creatFill('Modified', 'modified', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
+$ID             = Html::creatFill('ID', 'ID', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Name           = Html::creatFill('Username', 'username', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Email          = Html::creatFill('Email', 'email', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Status         = Html::creatFill('Status', 'status', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Ordering       = Html::creatFill('Ordering', 'ordering', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Group_name     = Html::creatFill('Group', 'group_name', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Created        = Html::creatFill('Created', 'created', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Modified       = Html::creatFill('Modified', 'modified', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
 
 $colum = $ID . $Name .  $Status .  $Group_name . $Ordering .  $Created .  $Modified;
 

@@ -3,7 +3,7 @@
 class AccountModel extends BackendModel
 {
 
-    private $_columns = array('id', 'username', 'password', 'group_id', 'email', 'group_acp', 'created', 'created_by', 'modified', 'modified_by', 'status', 'ordering');
+    private $_columns = array('id', 'username', 'password', 'group_id', 'email', 'group_acp', 'created', 'created_by', 'modified', 'modified_by', 'status', 'ordering', 'phone', 'address', 'fullname');
 
     public function __construct()
     {
@@ -28,7 +28,7 @@ class AccountModel extends BackendModel
     public function editPassword($arrParam, $option = null)
     {
         if ($option == null) {
-            $arrParam['form']['password']       = md5($arrParam['form']['password']);
+            $arrParam['form']['password']       = md5($arrParam['passWordNew']);
             $data    = array_intersect_key($arrParam['form'], array_flip($this->_columns));
             $this->update($data, array(array('id', $this->_id)));
             $this->message('success', 'Thay đổi password thành công');
@@ -38,7 +38,7 @@ class AccountModel extends BackendModel
     public function infoItem($arrParam, $option = null)
     {
         if ($option == null) {
-            $query[]    = "SELECT `id`,`username`,`email`,`group_id`,`status`,`ordering`";
+            $query[]    = "SELECT `id`,`username`,`fullname`,`phone`,`address`";
             $query[]    = "FROM `$this->table`";
             $query[]    = "WHERE `id` = '" . $this->_id . "'";
             $query      = implode(" ", $query);
@@ -47,12 +47,14 @@ class AccountModel extends BackendModel
         }
     }
 
-    public function createSelect()
-    {
-        $query              = 'SELECT `id`,`name` FROM ' . "`" . TBL_GROUP . "`";
-        $result             = $this->fetchPairs($query);
-        $result['default']  = '-- Group --';
-        ksort($result);
-        return $result;
-    }
+    
+    public function getUser(){
+		$username 		=  (Session::get('user'))['info']['username'];
+		$query[] 		= 'SELECT `id`,`username`,`password`,`email`,`fullname`,`address`,`phone`';
+		$query[] 		= "FROM `".TBL_USER."`";
+		$query[] 		= 'WHERE `username` = "'.$username .'"';
+		$query		    = implode(" ", $query);
+		$result		    = $this->fetchRow($query);
+		return $result;
+	}
 }

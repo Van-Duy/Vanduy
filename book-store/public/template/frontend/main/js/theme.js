@@ -1,15 +1,16 @@
 $(document).ready(function () {
     // xem sản phẩm qua modal
-    viewModal = function (id) {
-        link = 'index.php?module=frontend&controller=index&action=view';
+    viewModal = function (rootURL, id) {
+        link = rootURL + 'index.php?module=frontend&controller=index&action=view';
         $.get(link, { 'id': id },
             function (data) {
+                console.log(data);
                 var name = data['name'];
                 var sale = formatNumber(data['price'] - (data['price'] * data['sale_off'] / 100));
                 var price = formatNumber(data['price']);
                 var title = data['description'].substring(0, 300);
                 var img = '<img src="' + data['src'] + '" alt="" class="w-100 img-fluid blur-up lazyload book-picture">';
-                var buttton = '<a href="javascript:void(0)" onclick="buyProduct(' + id + ')" class="btn btn-solid mb-1 btn-add-to-cart">Chọn Mua</a><a href="' + data['linkretail'] + '" class="btn btn-solid mb-1 btn-view-book-detail">Xem chi tiết</a>';
+                var buttton = '<a href="javascript:void(0)" onclick="buyProduct(\'' + rootURL + '\',' + id + ')" class="btn btn-solid mb-1 btn-add-to-cart">Chọn Mua</a><a href="' + data['linkretail'] + '" class="btn btn-solid mb-1 btn-view-book-detail">Xem chi tiết</a>';
 
                 $('.book-name').html(name);
                 $('.quick-view-img').html(img);
@@ -20,13 +21,13 @@ $(document).ready(function () {
             'json'
         );
     }
-
     // mua sản phẩm
-    buyProduct = function (id) {
+    buyProduct = function (rootURL, id) {
         var quantify = $('input[name=quantity]').val();
         if (quantify != null) { quantify = quantify } else { quantify = 1 };
         if (quantify > 0) {
-            var link = 'index.php?module=frontend&controller=user&action=buy';
+            var link = rootURL + 'index.php?module=frontend&controller=user&action=buy';
+            console.log(link);
             $.get(link, { 'id': id, 'quantify': quantify },
                 function (data) {
                     quantify = data['quantify'];
@@ -79,7 +80,7 @@ $(document).ready(function () {
                     var sumQuantify = data['sumQuantify'];
                     var sumPrice = data['sumPrice'];
 
-                    var a = $('input[id="form[quantify][]-'+id+'"').attr('value',quantify);
+                    var a = $('input[id="form[quantify][]-' + id + '"').attr('value', quantify);
                     $('tr[id=' + id + ']' + ' .sumPrice').attr('value', priceNew);
                     $('tr[id=' + id + ']' + ' .sumPrice').html(formatNumber(priceNew) + ' đ');
                     $('.sumcart').html(formatNumber(sumPrice) + ' đ');
@@ -95,8 +96,33 @@ $(document).ready(function () {
         }
     });
 
+
+    // sort category
+    $('#sort-form select[name="sort"]').change(function () {
+        sort = getUrlParam('sort');
+        if(sort){
+            $('#sort-form').append('<input type="hidden" name="sort" value="'+sort +'">');
+        }
+        $('#sort-form').submit();
+    });
+
+    // show more show less
+    if ($('.category-item').length > 10) {
+        $('.category-item:gt(9)').hide();
+        $('#btn-view-more').show();
+    }
+
+    $('#btn-view-more').on('click', function () {
+        $('.category-item:gt(9)').toggle();
+        $(this).text() === 'Xem thêm' ? $(this).text('Thu gọn') : $(this).text('Xem thêm');
+    });
 });
 
 function formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
+function getUrlParam(key) {
+    let searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get(key);
 }

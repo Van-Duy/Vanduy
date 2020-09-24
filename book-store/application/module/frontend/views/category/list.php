@@ -2,77 +2,24 @@
 require_once 'sidebar/modal.php';
 // show items
 if (isset($this->listSingle)) {
-    $value              = $this->listSingle;
-    $nameBook           = HtmlFront::createNameLogin($value['name']);
-    $id                 = $value['id'];
-    $list               = $value['category_id'];
-    $name               = $value['name'];
-    $price              = $value['price'];
-    $description        = $value['description'];
-    $sale_off           = $value['sale_off'];
-    $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
-
-    $html               .= HtmlFront::createListItem($name, $price, $sale_off, $description, $img,$id);
+    $nameBook       = HtmlFront::createNameLogin($this->listSingle['name']);
+    $html           = HtmlFront::createListItem($this->listSingle,$this->arrParam['module'],$this->arrParam['controller']);
 }
-
 //show sách nổi bật
 $htmlTopProduct = "";
 if (isset($this->TopItems)) {
-    $htmlTopProduct .= "<div>";
-    $count          = 0;
-    foreach ($this->TopItems as $value) {
-        $id                 = $value['id'];
-        $list               = $value['category_id'];
-        $name               = $value['name'];
-        $price              = $value['price'];
-        $description        = $value['description'];
-        $sale_off           = $value['sale_off'];
-        $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
-        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'list', ['list' => $list,'id' => $id]);
-
-        $htmlTopProduct    .= HtmlFront::createproductTop($name, $sale_off,$link,$img, 4, $description, $price);
-        $count++;
-        if ($count == 4) $htmlTopProduct .= '</div><div>';
-    }
-    $htmlTopProduct .= "</div>";
+    $htmlTopProduct   = HtmlFront::createproductTop($this->TopItems,$this->arrParam['module'],$this->arrParam['controller']);
 }
 
 //show sách mới
 $htmlNewProduct = "";
 if (isset($this->NewItems)) {
-    $htmlNewProduct .= "<div>";
-    $count          = 0;
-    foreach ($this->NewItems as $value) {
-        $id                 = $value['id'];
-        $list               = $value['category_id'];
-        $name               = $value['name'];
-        $price              = $value['price'];
-        $description        = $value['description'];
-        $sale_off           = $value['sale_off'];
-        $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
-        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'list', ['list' => $list,'id' => $id]);
-        $htmlNewProduct    .= HtmlFront::createproductTop($name, $sale_off,$link, $img, 4, $description, $price);
-        $count++;
-        if ($count == 3) $htmlNewProduct .= '</div><div>';
-    }
-    $htmlNewProduct .= "</div>";
+    $htmlNewProduct = HtmlFront::createproductTop($this->NewItems,$this->arrParam['module'],$this->arrParam['controller']);
 }
 
 //show sách liên quan
-$htmlRelateProduct = "";
 if (isset($this->relateBook)) {
-    foreach ($this->relateBook as $value) {
-        $id                 = $value['id'];
-        $list               = $value['category_id'];
-        $name               = $value['name'];
-        $price              = $value['price'];
-        $description        = $value['description'];
-        $sale_off           = $value['sale_off'];
-        $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
-        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'list', ['list' => $list,'id' => $id]);
-        $htmlRelateProduct    .= HtmlFront::createproductRelate($name, $sale_off,$link, $img, 4, $description, $price,$id);
-        $count++;
-    }
+    $htmlRelateProduct = HtmlFront::createproductRelate($this->relateBook,$this->arrParam['module'],$this->arrParam['controller']);
 }
 
 ?>

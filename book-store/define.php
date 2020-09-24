@@ -37,6 +37,7 @@
 	define ('TBL_CATEGORY'		, 'category');
 	define ('TBL_BOOK'			, 'book');
 	define ('TBL_CART'			, 'cart');
+	define ('TBL_SLIDER'		, 'slider');
 	
 	// ====================== CONFIG ===========================
 	define ('TIME_LOGIN'		, 3600);

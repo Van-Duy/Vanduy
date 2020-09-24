@@ -309,6 +309,24 @@ class Helper
 		return $xhtml;
 	}
 
+	// Create Item select number
+	public static function showItemSelectNumber($name, $arrParam, $keySelect, $id, $style = 'unset')
+	{
+
+		$xhtml = '<select style="width: ' . $style . '" name="' . $name . '" class="custom-select custom-select-sm text-white bg-warning" id="' . $id . '">';
+		if (isset($arrParam)) {
+			foreach ($arrParam as $key => $value) {
+				if ($key == $keySelect) {
+					$xhtml .= '<option selected="selected" value="' . $key . '">' . $value . '</option>';
+				} else {
+					$xhtml .= '<option value="' . $key . '">' . $value . '</option>';
+				}
+			}
+		}
+		$xhtml .= '</select>';
+		return $xhtml;
+	}
+
 	// HightLight
 	public static function highLight($input, $searchValue)
 	{

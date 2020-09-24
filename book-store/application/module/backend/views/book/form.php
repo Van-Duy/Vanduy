@@ -32,7 +32,8 @@ $inputPicture       = Html::cmsInput('picture', 'file', '', $result['picture']);
 $priceName          = Html::cmsInput('form[price]', 'text', '', $result['price']);
 $sale_offName       = Html::cmsInput('form[sale_off]', 'text', '', $result['sale_off']);
 $inputOrdering      = Html::cmsInput('form[ordering]', 'number', '', $result['ordering']);
-$decriptionG        = '<textarea style="width: inherit;" name="form[description]" cols="20" rows="10">' . $result['description'] . '</textarea>';
+$decriptionG        = '<textarea style="width: inherit;" name="form[description]" cols="5" rows="2">' . $result['description'] . '</textarea>';
+$decriptionMain     = '<textarea name="form[description_main]" id="editor" style="width: inherit;" rows="10" cols="80">' . $result['description_main'] . '</textarea>';
 
 // create div
 $nameDiv            = Html::cmsDiv('book-name', $inputName, true);
@@ -43,7 +44,8 @@ $orderingDiv        = Html::cmsDiv('ordering', $inputOrdering, true);
 $statusDiv          = Html::cmsDiv('status', $status, true);
 $specialDiv         = Html::cmsDiv('special', $special, true);
 $category_nameDiv   = Html::cmsDiv('category_id', $selectCa, true);
-$desription         = Html::cmsDiv('description', $decriptionG);
+$desription         = Html::cmsDiv('content', $decriptionG);
+$desription_main    = Html::cmsDiv('description_main', $decriptionMain);
 
 
 
@@ -56,7 +58,7 @@ if (!empty($result['id'])) {
     $inputPictureHidden = Html::cmsInput('form[picture_hidden]', 'hidden', '', $result['picture']);
 }
 
-$div = $nameDiv . $imgDiv . $inputPictureHidden . $pictureDiv . $priceDiv . $sale_offDiv . $orderingDiv . $statusDiv . $specialDiv  . $category_nameDiv . $desription;
+$div = $nameDiv . $imgDiv . $inputPictureHidden . $pictureDiv . $priceDiv . $sale_offDiv . $orderingDiv . $statusDiv . $specialDiv  . $category_nameDiv . $desription . $desription_main;
 
 echo $this->errors;
 
@@ -80,3 +82,9 @@ echo $this->errors;
             </div>
         </div>
 </section>
+
+
+
+    
+    
+

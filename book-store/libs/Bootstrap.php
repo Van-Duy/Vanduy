@@ -32,7 +32,8 @@ class Bootstrap
 
 			$userInfo	= Session::get('user');
 
-			$logged		= ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time());
+			//$logged		= ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time());
+			$logged		= ($userInfo['login'] == true);
 
 			// MODULE ADMIN
 			if ($module == 'backend') {

@@ -4,29 +4,16 @@ require_once 'sidebar/modal.php';
 // show sách
 $html  = "";
 if (!empty($this->Items)) {
-    foreach ($this->Items as $value) {
-        $id                 = $value['id'];
-        $list               = $value['category_id'];
-        $name               = $value['name'];
-        //$nameURL            = URL::filterURL($name);
-        $price              = $value['price'];
-        $description        = $value['description'];
-        $sale_off           = $value['sale_off'];
-        $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
-        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'list', ['list' => $list,'id' => $id]);
-        
-        $html               .= HtmlFront::createproductForList($name, $sale_off,$link, $img, 4, $description, $price,$id);
-    }
+    $html       = HtmlFront::createproductForList($this->Items, $this->arrParam['module'], $this->arrParam['controller']);
     $pagination = $this->pagination->showPaginationFront($linkpagination);
-    $count      = HtmlFront::createPaginationCount($this->pagination->totalItemsPerPage,$this->pagination->totalItems,$this->pagination->currentPage);
-}else{
-    $count  = 'Đừng có mà tìm kiếm tào lao';
+    $count      = HtmlFront::createPaginationCount($this->pagination->totalItemsPerPage, $this->pagination->totalItems, $this->pagination->currentPage);
+} else {
+    $count  = 'Đang cập nhật ...';
 }
 
 // sort
-$arrSort    = array('default' =>' - Sắp xếp - ','price_asc' => 'Giá tăng dần','price_desc' => 'Giá giảm dần','latest' => 'Mới nhất' );
-$htmlSort   = HtmlFront::sort('sort','sort',$arrSort);
-
+$arrSort    = array('default' => ' - Sắp xếp - ', 'price_asc' => 'Giá tăng dần', 'price_desc' => 'Giá giảm dần', 'latest' => 'Mới nhất');
+$htmlSort   = HtmlFront::sort('sort', 'sort', $arrSort);
 
 ?>
 
@@ -47,7 +34,7 @@ $htmlSort   = HtmlFront::sort('sort','sort',$arrSort);
                             <div class="col-12">
                                 <div class="product-filter-content">
                                     <?php echo HtmlFront::createCollection($this->_dirImg); ?>
-                                   <?php echo $htmlSort ?>
+                                    <?php echo $htmlSort ?>
                                 </div>
                             </div>
                         </div>

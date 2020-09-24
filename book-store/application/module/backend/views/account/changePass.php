@@ -9,16 +9,16 @@ $linkCancel        = URL::createLink('backend', 'dashboard', 'index');
 $cancel            = Html::cmsButtonSave('Cancel', 'btn-danger', $linkCancel);
 
 // create (input)
-$inputName          = Html::cmsInput('form[username]', 'text', 'readonly', $result['username']);
-$inputPass          = Html::cmsInput('form[password]', 'text', '', $result['password']);
+$inputPass          = Html::cmsInput('form[passWordOld]', 'password', '', '');
+$inputPassNew       = Html::cmsInput('form[passWordNew]', 'password', '', '');
+$inputPassNewRe     = Html::cmsInput('form[passNewRe]', 'password', '', '');
 
 // create div
-$nameDiv            = Html::cmsDiv('username', $inputName);
-$passwordDiv        = Html::cmsDiv('password', $inputPass, true);
-$inputID            = Html::cmsInput('form[id]', 'text', 'readonly', $result['id']);
-$idDiv              = Html::cmsDiv('ID', $inputID);
+$PassOldDiv         = Html::cmsDiv('Mật khẩu củ', $inputPass, true);
+$PassNewDiv         = Html::cmsDiv('Mật khẩu Mới', $inputPassNew, true);
+$PassNewReDiv       = Html::cmsDiv('Nhập lại mật khẩu', $inputPassNewRe, true);
 
-$div = $nameDiv  . $passwordDiv;
+$div =  $PassOldDiv . $PassNewDiv . $PassNewReDiv;
 
 echo $this->errors;
 
@@ -31,7 +31,7 @@ echo $this->errors;
         <div class="card card-info card-outline">
             <div class="card-body">
                 <form action="#" method="post" class="mb-0" id="form" name="form">
-                    <?php echo $div . $idDiv; ?>
+                    <?php echo $div ; ?>
                     <input type="hidden" id="form[token]" name="form[token]" value="1596364518">
                 </form>
             </div>

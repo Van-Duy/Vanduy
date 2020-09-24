@@ -7,13 +7,13 @@ $arrMuti  = array('default' => "--Bulk Action--", "multi-active" => "Multi Activ
 $Muti     = Helper::creatStatus('bulk-action', 'custom-select custom-select-sm mr-1', $arrMuti, $this->arrParam["bulk-action"], 'width: unset', "bulk-action");
 
 // Colum
-$ID             = Html::creatFill('ID', 'ID', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Name           = Html::creatFill('Name', 'name', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Picture        = Html::creatFill('Picture', 'picture', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Status         = Html::creatFill('Status', 'status', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$ShowHome       = Html::creatFill('ShowHome', 'showHome', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Created        = Html::creatFill('Created', 'created', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
-$Modified       = Html::creatFill('Modified', 'modified', $this->arrParam['namePost'], $this->arrParam['namePostDir']);
+$ID             = Html::creatFill('ID', 'ID', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Name           = Html::creatFill('Name', 'name', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Picture        = Html::creatFill('Picture', 'picture', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Status         = Html::creatFill('Status', 'status', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$ShowHome       = Html::creatFill('ShowHome', 'showHome', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Created        = Html::creatFill('Created', 'created', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Modified       = Html::creatFill('Modified', 'modified', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
 
 $colum = $ID . $Name . $Picture .  $Status . $ShowHome  .  $Created .  $Modified;
 

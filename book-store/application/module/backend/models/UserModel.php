@@ -45,10 +45,10 @@ class UserModel extends BackendModel
         }
 
         // Fill
-        if (!empty($arrParam['namePost']) && !empty($arrParam['namePostDir'])) {
-            $name         = $arrParam['namePost'];
-            $nameDir     = $arrParam['namePostDir'];
-            $query[]    = "ORDER BY `$name` $nameDir";
+        if (!empty($arrParam['sort_field']) && !empty($arrParam['sort_order'])) {
+            $name           = $arrParam['sort_field'];
+            $nameDir        = $arrParam['sort_order'];
+            $query[]        = "ORDER BY `$name` $nameDir";
         } else {
             $query[]    = "ORDER BY `u`.`id` desc";
         }
@@ -105,14 +105,32 @@ class UserModel extends BackendModel
 
     public function countStatus($arrParam, $option  = null)
     {
-        $query[]     = 'SELECT COUNT(`id`) AS `total`';
-        $query[]     = "FROM `$this->table`";
-        $query[]     = "WHERE `id` > 0";
+        $query[]     = 'SELECT COUNT(`u`.`id`) AS `total`';
+        $query[]     = "FROM `$this->table` AS `u` LEFT JOIN `" . TBL_GROUP . "` AS g ON `u`.`group_id` = `g`.`id`";
+        $query[]     = "WHERE `u`.`id` > 0";
         //Count Active
         if (isset($option['task'])) {
             $number = ($option['task'] == 'active') ? 'active' : 'inactive';
-            $query[]     = "AND `status` = '$number'";
+            $query[]     = "AND `u`.`status` = '$number'";
         }
+
+        // FILTER : KEYWORD
+        if (!empty($arrParam['search'])) {
+            $query[]    = "AND (";
+            $keyword    = "'%{$arrParam['search']}%'";
+            foreach ($this->fieldSearchAccepted as $field) {
+                $query[] = "`u`.`$field` LIKE $keyword";
+                $query[] = "OR";
+            }
+            array_pop($query);
+            $query[] = ")";
+        }
+
+        // key search filter_group_name
+        if (!empty($arrParam['filter_group_name']) && $arrParam['filter_group_name'] != "default") {
+            $query[]    = "AND `g`.`id` ='" . $arrParam['filter_group_name'] . "'";
+        }
+
         $query        = implode(" ", $query);
         $result        = $this->fetchRow($query);
         return $result;

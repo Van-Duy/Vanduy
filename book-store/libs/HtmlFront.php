@@ -5,7 +5,6 @@ class HtmlFront
     //                      frontned 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-
     // creat createLiUser
     public static function createLiUser($srcImg, $arr)
     {
@@ -21,88 +20,126 @@ class HtmlFront
     }
 
     // creat productBox
-    public static function createproductBox($name, $sale, $link, $img, $star, $title, $price, $id)
+    public static function createproductBox($arr,$module,$controller)
     {
-        $title          = substr($title, 0, 50);
-        $priceAffSale   = number_format($price - ($price * $sale / 100));
-        $price          = number_format($price);
+        $html  = "";
+        foreach ($arr as $value) {
+            $category_nameURL   = URL::filterURL($value['category_name']);
+            $id                 = $value['id'];
+            $list               = $value['category_id'];
+            $name               = self::formatTitle($value['name'],40);
+            $title              = $value['name'];
+            $nameURL            = URL::filterURL($name);
+            $price              = $value['price'];
+            $description        = self::formatTitle($value['description'],1000);
+            $sale_off           = $value['sale_off'];
+            $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
+            $link               = URL::createLink($module, $controller, 'list', ['list' => $list, 'id' => $id], "$category_nameURL/$nameURL-$list-$id.html");
+            $star               = 4;
+            
+            $priceAffSale   = self::formatPrice(($price - ($price * $sale_off / 100)));
+            $price          = self::formatPrice($price);
 
-
-        $html = ' <div class="product-box"><div class="img-wrapper">';
-        $html .= '<div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale . '%</span></div>';
-        $html .= '<div class="front"><a href="' . $link . '"><img src="' . $img . '" class="img-fluid blur-up lazyload bg-img" alt="product"></a></div>';
-        $html .= ' <div class="cart-info cart-wrap">
-                        <a href="javascript:void(0)" onclick="buyProduct(' . $id . ')" title="Add to cart"><i class="ti-shopping-cart"></i></a>
-                        <a href="javascript:void(0)" onclick="viewModal(' . $id . ')" title="Quick View"><i class="ti-search" data-toggle="modal" data-target="#quick-view"></i></a>
-                    </div></div><div class="product-detail"><div class="rating">';
-        $x = 0;
-        for ($x = 0; $x <= $star; $x++) {
-            $html .=  '<i class="fa fa-star"></i>';
+            $html .= ' <div class="product-box"><div class="img-wrapper">';
+            $html .= '<div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale_off . '%</span></div>';
+            $html .= '<div class="front"><a href="' . $link . '"><img src="' . $img . '" class="img-fluid blur-up lazyload bg-img" alt="product"></a></div>';
+            $html .= ' <div class="cart-info cart-wrap">
+                            <a href="javascript:void(0)" onclick="buyProduct(\'' . ROOT_URL . '\',' . $id . ')" title="Add to cart"><i class="ti-shopping-cart"></i></a>
+                            <a href="javascript:void(0)" onclick="viewModal(\'' . ROOT_URL . '\',' . $id . ')" title="Quick View"><i class="ti-search" data-toggle="modal" data-target="#quick-view"></i></a>
+                        </div></div><div class="product-detail"><div class="rating">';
+            $x = 0;
+            for ($x = 0; $x <= $star; $x++) {
+                $html .=  '<i class="fa fa-star"></i>';
+            }
+            $html .= '</div>';
+            $html .= '<a href="' . $link . '"
+                            title="' . $title . '">
+                            <h6>' . $name . '...</h6>
+                        </a>';
+            $html .= '<h4 class="text-lowercase">' . $priceAffSale .' <del>' . $price .'</del></h4></div></div>';
         }
-        $html .= '</div>';
-        $html .= '<a href="' . $link . '"
-                        title="' . $name . '">
-                        <h6>' . $title . '...</h6>
-                    </a>';
-        $html .= '<h4 class="text-lowercase">' . $priceAffSale . ' đ <del>' . $price . ' đ</del></h4></div></div>';
-
         return $html;
     }
 
     // creat productBox --- forList
-    public static function createproductForList($name, $sale, $link, $img, $star, $title, $price, $id)
+    public static function createproductForList($arr,$module,$controller)
     {
-        $namer          = substr($name, 0, 40);
-        $title          = substr($title, 0, 1000);
-        $priceAffSale   = number_format($price - ($price * $sale / 100));
-        $price          = number_format($price);
+        $html  = "";
+        foreach ($arr as $value) {
+                $category_nameURL   = URL::filterURL($value['category_name']);
+                $id                 = $value['id'];
+                $list               = $value['category_id'];
+                $name               = self::formatTitle($value['name'],40);
+                $nameURL            = URL::filterURL($name);
+                $price              = $value['price'];
+                $description        = self::formatTitle($value['description'],1000);
+                $sale_off           = $value['sale_off'];
+                $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
+                $link               = URL::createLink($module, $controller, 'list', ['list' => $list, 'id' => $id], "$category_nameURL/$nameURL-$list-$id.html");
+                $star               = 4;
+                
+                $priceAffSale   = self::formatPrice(($price - ($price * $sale_off / 100)));
+                $price          = self::formatPrice($price);
 
 
-        $html = ' <div class="col-xl-3 col-6 col-grid-box"><div class="product-box"><div class="img-wrapper">';
-        $html .= '<div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale . '%</span></div>';
-        $html .= '<div class="front"><a href="' . $link . '"><img src="' . $img . '" class="img-fluid blur-up lazyload bg-img" alt="product"></a></div>';
-        $html .= ' <div class="cart-info cart-wrap">
-                        <a href="javascript:void(0)" onclick="buyProduct(' . $id . ')" title="Add to cart"><i class="ti-shopping-cart"></i></a>
-                        <a href="javascript:void(0)" onclick="viewModal(' . $id . ')" title="Quick View"><i class="ti-search" data-toggle="modal" data-target="#quick-view"></i></a>
-                    </div></div><div class="product-detail"><div class="rating">';
-        $x = 0;
-        for ($x = 0; $x <= $star; $x++) {
-            $html .=  '<i class="fa fa-star"></i>';
+            $html .= ' <div class="col-xl-3 col-6 col-grid-box"><div class="product-box"><div class="img-wrapper">';
+            $html .= '<div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale_off . '%</span></div>';
+            $html .= '<div class="front"><a href="' . $link . '"><img src="' . $img . '" class="img-fluid blur-up lazyload bg-img" alt="product"></a></div>';
+            $html .= ' <div class="cart-info cart-wrap">
+                            <a href="javascript:void(0)" onclick="buyProduct(\'' . ROOT_URL . '\',' . $id . ')" title="Add to cart"><i class="ti-shopping-cart"></i></a>
+                            <a href="javascript:void(0)" onclick="viewModal(\'' . ROOT_URL . '\',' . $id . ')" title="Quick View"><i class="ti-search" data-toggle="modal" data-target="#quick-view"></i></a>
+                        </div></div><div class="product-detail"><div class="rating">';
+            $x = 0;
+            for ($x = 0; $x <= $star; $x++) {
+                $html .=  '<i class="fa fa-star"></i>';
+            }
+            $html .= '</div>';
+            $html .= '<a href="' . $link . '"
+                            title="' . $name . '">
+                            <h6>' . $name . '...</h6>
+                        </a>';
+            $html .= '<p>' . $description . '</p>';
+            $html .= '<h4 class="text-lowercase">' . $priceAffSale .' <del>' . $price .'</del></h4></div></div></div>';
         }
-        $html .= '</div>';
-        $html .= '<a href="' . $link . '"
-                        title="' . $name . '">
-                        <h6>' . $namer . '...</h6>
-                    </a>';
-        $html .= '<p>' . $title . '</p>';
-        $html .= '<h4 class="text-lowercase">' . $priceAffSale . ' đ <del>' . $price . ' đ</del></h4></div></div></div>';
-
         return $html;
     }
 
     // creat productTop
-    public static function createproductTop($name, $sale, $link, $img, $star, $title, $price)
+    public static function createproductTop($arr,$module,$controller)
     {
-        $namer          = substr($name, 0, 30);
-        $title          = substr($title, 0, 1000);
-        $priceAffSale   = number_format($price - ($price * $sale / 100));
-        $price          = number_format($price);
+        $html           = "<div>";
+        $count          = 0;
+        foreach ($arr as $value) {
+            $category_nameURL   = URL::filterURL($value['category_name']);
+            $id                 = $value['id'];
+            $list               = $value['category_id'];
+            $name               = self::formatTitle($value['name'],40);
+            $nameURL            = URL::filterURL($name);
+            $price              = $value['price'];
+            $sale_off           = $value['sale_off'];
+            $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
+            $link               = URL::createLink($module, $controller, 'list', ['list' => $list, 'id' => $id], "$category_nameURL/$nameURL-$list-$id.html");
+            $star               = 4;
+            $count++;
+            $priceAffSale   = self::formatPrice(($price - ($price * $sale_off / 100)));
+            $price          = self::formatPrice($price);
 
-
-        $html = ' <div class="media"><a href="' . $link . '"><div class="img-wrapper"><div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale . '%</span></div>';
-        $html .= '<img class="img-fluid blur-up lazyload" src="' . $img . '" alt="' . $name . '"></a></div>';
-        $html .= '<div class="media-body align-self-center"><div class="rating">';
-        $x = 0;
-        for ($x = 0; $x <= $star; $x++) {
-            $html .=  '<i class="fa fa-star"></i>';
+            $html .= ' <div class="media"><a href="' . $link . '"><div class="img-wrapper"><div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale_off . '%</span></div>';
+            $html .= '<img class="img-fluid blur-up lazyload" src="' . $img . '" alt="' . $name . '"></a></div>';
+            $html .= '<div class="media-body align-self-center"><div class="rating">';
+            $x = 0;
+            for ($x = 0; $x <= $star; $x++) {
+                $html .=  '<i class="fa fa-star"></i>';
+            }
+            $html .= '</div>';
+            $html .= '<a href="' . $link . '"
+                            title="' . $name . '">
+                            <h6>' . $name . '...</h6>
+                        </a>';
+            $html .= '<h4 class="text-lowercase">' . $priceAffSale .' <del>' . $price .'</del></h4></div></div>';
+            if ($count == 3) $html .= '</div><div>';
         }
         $html .= '</div>';
-        $html .= '<a href="' . $link . '"
-                        title="' . $name . '">
-                        <h6>' . $namer . '...</h6>
-                    </a>';
-        $html .= '<h4 class="text-lowercase">' . $priceAffSale . ' vnd <del>' . $price . ' vnd</del></h4></div></div>';
-
         return $html;
     }
 
@@ -164,7 +201,7 @@ class HtmlFront
     // creat Login-Name
     public static function createNameLogin($name)
     {
-        $html = ' <div class="breadcrumb-section">
+        $html = ' <div class="breadcrumb-section" style="margin-top: 106.215px;">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
@@ -290,12 +327,23 @@ class HtmlFront
     }
 
     // creat pagination-count
-    public static function createListItem($name, $price, $sale, $title, $src, $id)
+    public static function createListItem($arr,$module,$controller)
     {
-
-        $titleS         = substr($title, 0, 500);
-        $priceAffSale   = number_format($price - ($price * $sale / 100));
-        $price          = number_format($price);
+        $value = $arr;
+        $category_nameURL   = URL::filterURL($value['category_name']);
+        $id                 = $value['id'];
+        $list               = $value['category_id'];
+        $name               = $value['name'];
+        $nameURL            = URL::filterURL($name);
+        $price              = $value['price'];
+        $title              = self::formatTitle($value['description'],1000);
+        $description        = $value['description_main'];
+        $sale_off           = $value['sale_off'];
+        $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
+        $link               = URL::createLink($module, $controller, 'list', ['list' => $list, 'id' => $id], "$category_nameURL/$nameURL-$list-$id.html");
+        
+        $priceAffSale   = self::formatPrice(($price - ($price * $sale_off / 100)));
+        $price          = self::formatPrice($price);
 
 
         $html = '<div class="col-lg-9 col-sm-12 col-xs-12">
@@ -308,14 +356,14 @@ class HtmlFront
                             <div class="row">
                                 <div class="col-lg-4 col-xl-4">
                                     <div class="product-slick">
-                                        <div><img src="' . $src . '" alt="" class="img-fluid w-100 blur-up lazyload image_zoom_cls-0"></div>
+                                        <div><img src="' . $img . '" alt="" class="img-fluid w-100 blur-up lazyload image_zoom_cls-0"></div>
                                     </div>
                                 </div>
                                 <div class="col-lg-8 col-xl-8 rtl-text">
                                     <div class="product-right">
                                         <h2 class="mb-2">' . $name . '</h2>
-                                        <h4><del>' . $price . ' đ</del><span> -' . $sale . '%</span></h4>
-                                        <h3>' . $priceAffSale . ' đ</h3>
+                                        <h4><del>' . $price .'</del><span> -' . $sale_off . '%</span></h4>
+                                        <h3>' . $priceAffSale .'</h3>
                                         <div class="product-description border-product">
                                             <h6 class="product-title">Số lượng</h6>
                                             <div class="qty-box">
@@ -335,10 +383,10 @@ class HtmlFront
                                             </div>
                                         </div>
                                         <div class="product-buttons">
-                                            <a href="javascript:void(0)" onclick="buyProduct(' . $id . ')" class="btn btn-solid ml-0"><i class="fa fa-cart-plus"></i> Chọn mua</a>
+                                            <a href="javascript:void(0)" onclick="buyProduct(\'' . ROOT_URL . '\',' . $id . ')" class="btn btn-solid ml-0"><i class="fa fa-cart-plus"></i> Chọn mua</a>
                                         </div>
                                         <div class="border-product">
-                                            ' . $titleS . '. </div>
+                                            ' . $title . '. </div>
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +402,7 @@ class HtmlFront
                                         </ul>
                                         <div class="tab-content nav-material" id="top-tabContent">
                                             <div class="tab-pane fade show active ckeditor-content" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
-                                                ' . $title . '
+                                                ' . $description . '
                                             </div>
                                         </div>
                                     </div>
@@ -362,36 +410,49 @@ class HtmlFront
                             </div>
                         </section>
                     </div>';
+        
         return $html;
     }
 
     // creat productBox --- relate
-    public static function createproductRelate($name, $sale, $link, $img, $star, $title, $price, $id)
+    public static function createproductRelate($arr,$module,$controller)
     {
-        $namer          = substr($name, 0, 40);
-        $title          = substr($title, 0, 100);
-        $priceAffSale   = number_format($price - ($price * $sale / 100));
-        $price          = number_format($price);
+        $html  = "";
+        foreach ($arr as $value) {
+            $category_nameURL   = URL::filterURL($value['category_name']);
+            $id                 = $value['id'];
+            $list               = $value['category_id'];
+            $name               = self::formatTitle($value['name'],40);
+            $nameURL            = URL::filterURL($name);
+            $price              = $value['price'];
+            $description        = self::formatTitle($value['description'],1000);
+            $sale_off           = $value['sale_off'];
+            $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
+            $link               = URL::createLink($module, $controller, 'list', ['list' => $list, 'id' => $id], "$category_nameURL/$nameURL-$list-$id.html");
+            $star               = 4;
+            
+            $priceAffSale   = self::formatPrice(($price - ($price * $sale_off / 100)));
+            $price          = self::formatPrice($price);
 
 
-        $html = ' <div class="col-xl-2 col-md-4 col-sm-6"><div class="product-box"><div class="img-wrapper">';
-        $html .= '<div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale . '%</span></div>';
-        $html .= '<div class="front"><a href="' . $link . '"><img src="' . $img . '" class="img-fluid blur-up lazyload bg-img" alt="product"></a></div>';
-        $html .= ' <div class="cart-info cart-wrap">
-                        <a href="javascript:void(0)" onclick="buyProduct(' . $id . ')" title="Add to cart"><i class="ti-shopping-cart"></i></a>
-                        <a href="javascript:void(0)" onclick="viewModal(' . $id . ')" title="Quick View"><i class="ti-search" data-toggle="modal" data-target="#quick-view"></i></a>
-                    </div></div><div class="product-detail"><div class="rating">';
-        $x = 0;
-        for ($x = 0; $x <= $star; $x++) {
-            $html .=  '<i class="fa fa-star"></i>';
+            $html .= ' <div class="col-xl-2 col-md-4 col-sm-6"><div class="product-box"><div class="img-wrapper">';
+            $html .= '<div class="lable-block"><span class="lable4 badge badge-danger"> -' . $sale_off . '%</span></div>';
+            $html .= '<div class="front"><a href="' . $link . '"><img src="' . $img . '" class="img-fluid blur-up lazyload bg-img" alt="product"></a></div>';
+            $html .= ' <div class="cart-info cart-wrap">
+                            <a href="javascript:void(0)" onclick="buyProduct(\'' . ROOT_URL . '\',' . $id . ')" title="Add to cart"><i class="ti-shopping-cart"></i></a>
+                            <a href="javascript:void(0)" onclick="viewModal(\'' . ROOT_URL . '\',' . $id . ')" title="Quick View"><i class="ti-search" data-toggle="modal" data-target="#quick-view"></i></a>
+                        </div></div><div class="product-detail"><div class="rating">';
+            $x = 0;
+            for ($x = 0; $x <= $star; $x++) {
+                $html .=  '<i class="fa fa-star"></i>';
+            }
+            $html .= '</div>';
+            $html .= '<a href="' . $link . '"
+                            title="' . $name . '">
+                            <h6>' . $name . '...</h6>
+                        </a>';
+            $html .= '<h4 class="text-lowercase">' . $priceAffSale .' <del>' . $price .'</del></h4></div></div></div>';
         }
-        $html .= '</div>';
-        $html .= '<a href="' . $link . '"
-                        title="' . $name . '">
-                        <h6>' . $namer . '...</h6>
-                    </a>';
-        $html .= '<h4 class="text-lowercase">' . $priceAffSale . ' đ <del>' . $price . ' đ</del></h4></div></div></div>';
-
         return $html;
     }
 
@@ -425,11 +486,11 @@ class HtmlFront
     // creat productBox --- forcart
     public static function createproductCart($name, $sale, $link, $src, $price, $id, $quantify)
     {
-        $priceAffSalel      = ($price - ($price * $sale / 100));
-        $priceAffSale       = number_format($price - ($price * $sale / 100));
-        $totalPrice         =  number_format($priceAffSalel * $quantify);
+        $priceAffSalel      =   ($price - ($price * $sale / 100));
+        $priceAffSale       =   number_format($price - ($price * $sale / 100));
+        $totalPrice         =   number_format($priceAffSalel * $quantify);
         $totalPriceN        =  ($priceAffSalel * $quantify);
-        $price              = number_format($price);
+        $price              =   number_format($price);
 
 
         $html = '<tr id="' . $id . '">
@@ -446,7 +507,7 @@ class HtmlFront
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
-                                    <h2 class="td-color text-lowercase">' . $priceAffSale . ' đ</h2>
+                                    <h2 class="td-color text-lowercase">' . $priceAffSale .'</h2>
                                 </div>
                                 <div class="col-xs-3">
                                     <h2 class="td-color text-lowercase">
@@ -456,7 +517,7 @@ class HtmlFront
                             </div>
                         </td>
                         <td>
-                            <h2 class="text-lowercase price-single" value="' . $priceAffSalel . '">' . $priceAffSale . ' đ</h2>
+                            <h2 class="text-lowercase price-single" value="' . $priceAffSalel . '">' . $priceAffSale . '</h2>
                         </td>
                         <td>
                             <div class="qty-box">
@@ -467,7 +528,7 @@ class HtmlFront
                         </td>
                         <td><a href="javascript:deleteProduct(' . $id . ');" class="icon"><i class="ti-close"></i></a></td>
                         <td>
-                            <h2 class="td-color text-lowercase sumPrice">' . $totalPrice . ' đ</h2>
+                            <h2 class="td-color text-lowercase sumPrice">' . $totalPrice . '</h2>
                         </td>
                     </tr>';
 
@@ -481,7 +542,7 @@ class HtmlFront
                             <tr>
                                 <td>' . $name . ' :</td>
                                 <td>
-                                    <h2 class="text-lowercase sumcart" value="' . $value . '">' . $price . ' đ</h2>
+                                    <h2 class="text-lowercase sumcart" value="' . $value . '">' . $price .'</h2>
                                 </td>
                             </tr>
                         </tfoot>
@@ -509,33 +570,83 @@ class HtmlFront
         return $html;
     }
 
-     // creat createLiCart
-     public static function createLiCart($action,$arr)
+    // creat createLiCart
+    public static function createLiCart($action, $arr)
     {
         if (!empty($arr)) {
-             $html = '<div class="dashboard-left"><div class="collection-mobile-back"><span class="filter-back"><i class="fa fa-angle-left" aria-hidden="true"></i> Ẩn</span></div>';
-             $html .= '<div class="block-content"><ul>';
-             foreach ($arr as $key => $value) {
+            $html = '<div class="dashboard-left"><div class="collection-mobile-back"><span class="filter-back"><i class="fa fa-angle-left" aria-hidden="true"></i> Ẩn</span></div>';
+            $html .= '<div class="block-content"><ul>';
+            foreach ($arr as $key => $value) {
                 $class = '';
-                if($action == $value['nameShow']) $class = "active";
-                $html .= '<li class="'.$class.'"><a href="' . $value['link'] . '">' . $key . '</a></li>';
-             }
-             $html .= '</ul></div></div>';
+                if ($action == $value['nameShow']) $class = "active";
+                $html .= '<li class="' . $class . '"><a href="' . $value['link'] . '">' . $key . '</a></li>';
+            }
+            $html .= '</ul></div></div>';
         }
         return  $html;
     }
 
-     // creat form-group
-     public static function createFormGroup($lableName,$name,$value,$id = null)
+    // creat form-group
+    public static function createFormGroup($lableName, $name, $value, $id = null)
     {
         $readonly = "";
-        if($name == 'email') $readonly = 'readonly="1"';
+        if ($name == 'email') $readonly = 'readonly="1"';
         $html = '<div class="form-group">
-                    <label for="'.$name.'">'.$lableName.'</label>
-                    <input type="text" name="form['.$name.']" value="'.$value.'" class="form-control"
-                        id="'.$id.'" '.$readonly.'>
+                    <label for="' . $name . '">' . $lableName . '</label>
+                    <input type="text" name="form[' . $name . ']" value="' . $value . '" class="form-control"
+                        id="' . $id . '" ' . $readonly . '>
                 </div>';
         return $html;
+    }
+
+    // creat for footer
+    public static function createTitleForFooter($name,$title)
+    {
+       $html = '<div class="col-lg-4 col-md-6">
+                    <div class="footer-title footer-mobile-title">
+                        <h4>Giới thiệu</h4>
+                    </div>
+                    <div class="footer-contant">
+                        <div class="footer-logo">
+                            <h2 style="color: #5fcbc4">'.$name.'</h2>
+                        </div>
+                        <p>'.$title.'</p>
+                    </div>
+                </div>';
+        return $html;
+    }
+
+    // creat for footer
+    public static function createlistForFooter($name,$arr,$class = null)
+    {
+       $html = '<div class="sub-title"><div class="footer-title"><h4>'.$name.'</h4></div><div class="footer-contant"><ul>';
+        foreach($arr AS $key => $value){ $html .= '<li><a href="'.$key.'">'.$value.'</a></li>';}
+        $html .= '</ul></div></div>';
+        return $html;
+    }
+
+    // creat phonering
+    public static function createPhonering($number)
+    {
+        $html = '<div class="phonering-alo-phone phonering-alo-green phonering-alo-show" id="phonering-alo-phoneIcon">
+                        <div class="phonering-alo-ph-circle"></div>
+                        <div class="phonering-alo-ph-circle-fill"></div>
+                        <a href="tel:'.$number.'" class="pps-btn-img" title="Liên hệ">
+                            <div class="phonering-alo-ph-img-circle"></div>
+                        </a>
+                    </div>';
+
+        return $html;
+    }
+
+    public static function formatPrice($price,$prefix = "đ"){
+        return number_format($price,0,'.',',') . " " . $prefix;
+    }
+
+    public static function formatTitle($title,$legth,$prefix = "..."){
+        $prefix = ($legth == 0) ? '' : $prefix;
+        $title  = str_replace(['<p>','</p>'],'',$title);
+        return preg_replace('/\s+?(\S+)?$/','',substr($title,0,$legth)) . $prefix;
     }
 
 }

@@ -7,12 +7,14 @@ RewriteRule ^.*$ - [NC,L]
 
 RewriteRule		index.html 			index.php?module=frontend&controller=index&action=index
 RewriteRule		category.html 		index.php?module=frontend&controller=category&action=index
+RewriteRule		category-list.html  index.php?module=frontend&controller=category&action=category
 RewriteRule		register.html 		index.php?module=frontend&controller=index&action=register
 RewriteRule		login.html 			index.php?module=frontend&controller=index&action=login
 RewriteRule		cart.html 			index.php?module=frontend&controller=user&action=cart
 RewriteRule		history.html 		index.php?module=frontend&controller=user&action=history
 RewriteRule		changePass.html 	index.php?module=frontend&controller=user&action=changePass
 RewriteRule		info.html 		    index.php?module=frontend&controller=user&action=info
+RewriteRule		noitice.html 		index.php?module=frontend&controller=index&action=noitice
 RewriteRule		([A-Za-z0-9_-]+)-([0-9]+)\.html 		                        index.php?module=frontend&controller=category&action=index&list=$2
 RewriteRule		([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)-([0-9]+)-([0-9]+)\.html 		index.php?module=frontend&controller=category&action=list&list=$3&id=$4
 

@@ -17,21 +17,10 @@ if (!empty($this->topCategoryItems)) {
     foreach ($this->topCategoryItems as $key => $value) {
         $active = "";
         if ($x == 0) $active = 'active default';
-        $linkAllList = URL::createLink($this->arrParam['module'], 'category', 'index', array('list' => $key));
-        $htmlItems   .= '<div id="tab-category-' . $key . '" class="tab-content ' . $active . '">
-                        <div class="no-slider row tab-content-inside">';
-
-        foreach ($value as $keyB => $valueB) {
-            $id                 = $valueB['id'];
-            $list               = $valueB['category_id'];
-            $name               = $valueB['name'];
-            $price              = $valueB['price'];
-            $description        = $valueB['description'];
-            $sale_off           = $valueB['sale_off'];
-            $img                = Html::createImageSrc($valueB['picture'], $valueB['picture'], 'book', '252x323-');
-            $link               = URL::createLink($this->arrParam['module'], 'category', 'list', ['list' => $list, 'id' => $id]);
-            $htmlItems         .= HtmlFront::createproductBox($name, $sale_off, $link, $img, 4, $description, $price, $id);
-        }
+        $linkAllList    = URL::createLink($this->arrParam['module'], 'category', 'index', array('list' => $key),"$nameURL-$key.html");
+        $htmlItems      .= '<div id="tab-category-' . $key . '" class="tab-content ' . $active . '">
+                             <div class="no-slider row tab-content-inside">';
+        $htmlItems  .= HtmlFront::createproductBox($value,$this->arrParam['module'],$this->arrParam['controller']);
         $x++;
         $htmlItems .= '</div><div class="text-center"><a href="' . $linkAllList . '" class="btn btn-solid">Xem tất cả</a></div></div>';
     }

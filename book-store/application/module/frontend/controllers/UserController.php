@@ -10,8 +10,9 @@ class UserController extends FrontendController
 		$source = $this->_arrParam['form'];
 		if (isset($source)) {
 			$this->_model->saveProduct($this->_arrParam);
-			URL::redirect('frontend', 'index', 'index','','index.html');
-		}else{
+			URL::redirect('frontend', 'index', 'index', '', 'index.html');
+		}  
+		if(empty($this->_view->items)){
 			Session::set('message', array('class' => 'warning', 'content' => 'Chưa có sản phẩm nào trong giỏ hàng'));
 		}
 
@@ -59,7 +60,7 @@ class UserController extends FrontendController
 				} else {
 					if ($source['passWordNew'] == $source['passWordNewRe']) {
 						$this->_model->savePassWord($source);
-						URL::redirect('frontend', 'index', 'login','','login.html');
+						URL::redirect('frontend', 'index', 'login', '', 'login.html');
 					} else {
 						Session::set('message', array('class' => 'warning', 'content' => 'Mật khẩu mới phải trùng nhau..'));
 					}
@@ -78,7 +79,7 @@ class UserController extends FrontendController
 
 		if (isset($source['token'])) {
 			$this->_model->updateUser($source);
-			URL::redirect('frontend', 'user', 'info','','info.html');
+			URL::redirect('frontend', 'user', 'info', '', 'info.html');
 		}
 
 		$this->_view->render('user/info');

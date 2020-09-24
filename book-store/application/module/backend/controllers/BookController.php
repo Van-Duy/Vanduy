@@ -48,7 +48,7 @@ class BookController extends BackendController
 				$this->saveRedirect($id);
 			}
 		}
-
+		
 		$this->_view->arrParam = $this->_arrParam;
 		$this->_view->render($this->_setController . '/form');
 	}

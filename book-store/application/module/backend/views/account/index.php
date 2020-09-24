@@ -17,22 +17,19 @@ $linkCancel        = URL::createLink('backend', 'dashboard', 'index');
 $cancel            = Html::cmsButtonSave('Cancel', 'btn-danger', $linkCancel);
 
 // create (input)
-$inputEmail         = Html::cmsInput('form[email]', 'email', '', $result['email']);
-$inputPass          = Html::cmsInput('form[password]', 'password', '', $result['password']);
-$inputOrdering      = Html::cmsInput('form[ordering]', 'number', '', $result['ordering']);
+$inputName          = Html::cmsInput('form[username]', 'text', 'readonly', $result['username']);
+$inputFullName      = Html::cmsInput('form[fullname]', 'text', '', $result['fullname']);
+$inputPhone         = Html::cmsInput('form[phone]', 'text', '', $result['phone']);
+$inputAddress       = Html::cmsInput('form[address]', 'text', '', $result['address']);
 
 // create div
-$emailDiv           = Html::cmsDiv('email', $inputEmail,true);
-$passwordDiv        = Html::cmsDiv('password', $inputPass,true);
-$orderingDiv        = Html::cmsDiv('ordering', $inputOrdering,true);
-$statusDiv          = Html::cmsDiv('status', $status,true);
-$group_nameDiv      = Html::cmsDiv('group_id', $selectACP,true);
-$inputID            = Html::cmsInput('form[id]', 'text', 'readonly', $result['id']);
-$idDiv              = Html::cmsDiv('ID', $inputID);
-$inputName          = Html::cmsInput('form[username]', 'text', 'readonly', $result['username']);
-$nameDiv            = Html::cmsDiv('username', $inputName, true);
+$nameDiv            = Html::cmsDiv('username', $inputName,true);
+$fullnameDiv        = Html::cmsDiv('Họ Tên', $inputFullName);
+$phoneDiv           = Html::cmsDiv('Số điện thoại', $inputPhone);
+$addressDiv         = Html::cmsDiv('Địa chỉ', $inputAddress);
 
-$div = $nameDiv  . $emailDiv . $orderingDiv . $statusDiv . $group_nameDiv;
+
+$div = $nameDiv . $fullnameDiv . $phoneDiv . $addressDiv;
 
 echo $this->errors;
 
@@ -45,7 +42,7 @@ echo $this->errors;
         <div class="card card-info card-outline">
             <div class="card-body">
                 <form action="#" method="post" class="mb-0" id="form" name="form">
-                    <?php echo $div . $idDiv; ?>
+                    <?php echo $div ; ?>
                     <input type="hidden" id="form[token]" name="form[token]" value="1596364518">
                 </form>
             </div>

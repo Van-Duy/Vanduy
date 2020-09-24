@@ -16,6 +16,7 @@ class DashboardModel extends BackendModel
         if ($options['task'] == 'user')     $this->setTable(TBL_USER);
         if ($options['task'] == 'category') $this->setTable(TBL_CATEGORY);
         if ($options['task'] == 'book')     $this->setTable(TBL_BOOK);
+        if ($options['task'] == 'cart')     $this->setTable(TBL_CART);
         
         $query[] = "FROM `$this->table`";
         $query = implode(' ', $query);

@@ -8,7 +8,7 @@
     <?php echo $this->_cssFiles; ?>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed text-sm">
+<body class="hold-transition sidebar-mini layout-fixed text-sm sidebar-collapse">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -47,7 +47,8 @@
                  echo "toastr.".$message['class']."('".$message['content']."', 'Thực hiện!')";
               }
               Session::delete('message');
-        ?>
+        ?>;
+        CKEDITOR.replace( 'editor' );
     </script>
 </body>
 

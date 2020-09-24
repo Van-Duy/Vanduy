@@ -1,10 +1,17 @@
 <?php
 require_once LIBRARY_EXT_PATH . 'XML.php';
 $nameBook = HtmlFront::createNameLogin('Tất cả sách');
-
-
+$idListBook  = $this->arrParam['list'];
 //show category
 $categories = XML::getContentXML('categories.xml');
+if (!empty($idListBook)) {
+    foreach ($categories as $value) {
+        if ($idListBook == $value->id) {
+            $nameBook = HtmlFront::createNameLogin($value->name);
+            break;
+        }
+    }
+}
 // show category
 if (isset($categories)) {
     $listCategory = "";
@@ -12,35 +19,14 @@ if (isset($categories)) {
         $id                 = $value->id;
         $name               = $value->name;
         $nameURL            = URL::filterURL($name);
-        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'index', array('list' => $value->id),"$nameURL-$id.html");
-        $listCategory      .= HtmlFront::createCategory( $name , $link,$id, $this->arrParam['list']);
+        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'index', array('list' => $value->id), "$nameURL-$id.html");
+        $listCategory      .= HtmlFront::createCategory($name, $link, $id, $this->arrParam['list']);
     }
 }
-
-
 //show sách nổi bật
-$htmlTopProduct = "";
 if (isset($this->TopItems)) {
-    $htmlTopProduct .= "<div>";
-    $count          = 0;
-    foreach ($this->TopItems as $value) {
-        $id                 = $value['id'];
-        $list               = $value['category_id'];
-        $name               = $value['name'];
-        $price              = $value['price'];
-        $description        = $value['description'];
-        $sale_off           = $value['sale_off'];
-        $img                = Html::createImageSrc($value['picture'], $value['picture'], 'book', '252x323-');
-        $link               = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'list', ['list' => $list, 'id' => $id]);
-        $htmlTopProduct    .= HtmlFront::createproductTop($name, $sale_off, $link, $img, 4, $description, $price);
-        $count++;
-        if ($count == 4) $htmlTopProduct .= '</div><div>';
-    }
-    $htmlTopProduct .= "</div>";
+    $htmlTopProduct   = HtmlFront::createproductTop($this->TopItems, $this->arrParam['module'], $this->arrParam['controller']);
 }
-
-
-
 ?>
 <?php echo $nameBook; ?>
 <section class="section-b-space j-box ratio_asos">

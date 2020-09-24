@@ -10,6 +10,7 @@ class DashboardController extends BackendController
 		$this->_view->countUser 		= $this->_model->countItems($this->_arrParam, ['task' => 'user']);
 		$this->_view->countCategory 	= $this->_model->countItems($this->_arrParam, ['task' => 'category']);
 		$this->_view->countBook 		= $this->_model->countItems($this->_arrParam, ['task' => 'book']);
+		$this->_view->countCart 		= $this->_model->countItems($this->_arrParam, ['task' => 'cart']);
 		$this->_view->render($this->_setController . '/index');
 	}
 }

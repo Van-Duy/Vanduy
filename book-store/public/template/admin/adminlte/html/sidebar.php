@@ -16,6 +16,8 @@ $linkBookForm       = URL::createLink('backend', 'book', 'form');
 $linkAccountInfo    = URL::createLink('backend', 'account', 'index');
 $linkAccountPass    = URL::createLink('backend', 'account', 'changePass');
 $linkBack           = URL::createLink('frontend', 'index', 'index','','index.html');
+$linkSliderList     = URL::createLink('backend', 'slider', 'index');
+$linkSliderForm     = URL::createLink('backend', 'slider', 'form');
 
 //dashboard
 $arrDashboard       = ['parent' => ['name' => 'Dashboard', 'icon'   => 'tachometer-alt', 'link' => $linkDashboard]];
@@ -32,6 +34,10 @@ $user               = Html::createSidebar($controller, $action, $arrUser);
 //Category
 $arrCategory        = ['parent' => ['name' => 'Category', 'icon' => 'thumbtack', 'link' => '#'], 'child' => [['name' => 'List', 'icon' => 'list-ul', 'link' => $linkCategoryList, 'nameShow' => 'index'], ['name' => 'Form', 'icon' => 'edit', 'link' => $linkCategoryForm, 'nameShow' => 'form']]];
 $category           = Html::createSidebar($controller, $action, $arrCategory);
+
+//Slider
+$arrSlider          = ['parent' => ['name' => 'Slider', 'icon' => 'object-group', 'link' => '#'], 'child' => [['name' => 'List', 'icon' => 'list-ul', 'link' => $linkSliderList, 'nameShow' => 'index'], ['name' => 'Form', 'icon' => 'edit', 'link' => $linkSliderForm, 'nameShow' => 'form']]];
+$slider             = Html::createSidebar($controller, $action, $arrSlider);
 
 //Book
 $arrBook            = ['parent' => ['name' => 'Book', 'icon' => 'book-open', 'link' => '#'], 'child' => [['name' => 'List', 'icon' => 'list-ul', 'link' => $linkBookList, 'nameShow' => 'index'], ['name' => 'Form', 'icon' => 'edit', 'link' => $linkBookForm, 'nameShow' => 'form']]];
@@ -74,7 +80,7 @@ $back               = Html::createSidebar($controller, $action, $arrBack);
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <?php echo $dashboard; ?>
-                <?php echo $group . $user . $category . $book . $cart . $account . $back ; ?>
+                <?php echo $group . $user . $category . $slider . $book . $cart . $account . $back ; ?>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -43,7 +43,7 @@ if(!empty($this->items)){
         ';
     }
 }else{
-    $xhtml = '<tr><td class="text-center"><h2>Không có giá trị !!!</h2></td><tr>';
+    $xhtml = ' <td class="text-center" colspan="9"> Không tìm thấy dữ liệu !!! </td>';
 }
 
 ?>

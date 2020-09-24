@@ -28,7 +28,7 @@ class AccountValidate extends Validate
          }
 
          public function validatePass(){
-                $this   ->addRule('password', 'password',array('action' => 'edit'));
+                $this   ->addRule('passWordNew', 'password',array('action' => 'edit'));
                 $this->run();
         }
 

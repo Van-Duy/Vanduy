@@ -13,17 +13,16 @@ class CategoryModel extends Model
 
 	public function showItems($arrParam, $option = null)
 	{
-		if ($option == null) {
-			$query[]    = "SELECT `id`,`picture`,`name`,`price`,`category_id`,`description`,`sale_off`";
-			$query[]    = "FROM " . TBL_BOOK . "";
-			$query[]    = "WHERE `status` = 'active'";
+		$query[]    = "SELECT `b`.`id`,`b`.`picture`,`b`.`name`,`b`.`description`,`b`.`price`,`b`.`category_id`,`b`.`sale_off`,`c`.`name` AS `category_name`";
+		$query[]    = "FROM " . TBL_BOOK . " AS `b` LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 
+		if ($option == null) {
+			$query[]    = "WHERE `b`.`status` = 'active'";
 			// show category
 			if (isset($arrParam['list'])) {
 				$id = $arrParam['list'];
-				$query[]    = "AND `category_id` = " . $id . "";
+				$query[]    = "AND `b`.`category_id` = " . $id . "";
 			}
-
 			// pagination
 			$pagination				= $arrParam['pagination'];
 			$currentPage 			= $pagination['currentPage'];
@@ -35,34 +34,23 @@ class CategoryModel extends Model
 			$result        	= $this->fetchAll($query);
 			return $result;
 		} else if ($option['task'] == 'topItems') {
-
-			$query[]    = "SELECT `id`,`picture`,`name`,`price`,`category_id`,`description`,`sale_off`";
-			$query[]    = "FROM " . TBL_BOOK . "";
-			$query[]    = "WHERE `status` = 'active' AND `special` = 1";
-			$query[]    = "LIMIT 0,8";
+			$query[]    = "WHERE `b`.`status` = 'active' AND `b`.`special` = 1";
+			$query[]    = "LIMIT 0,5";
 
 			$query        	= implode(" ", $query);
 			$result        	= $this->fetchAll($query);
 			return $result;
 		} else if ($option['task'] == 'newItems') {
-
-			$query[]    = "SELECT `id`,`picture`,`name`,`price`,`category_id`,`description`,`sale_off`";
-			$query[]    = "FROM " . TBL_BOOK . "";
-			$query[]    = "ORDER BY `id` DESC";
+			$query[]    = "ORDER BY `b`.`id` DESC";
 			$query[]    = "LIMIT 0,6";
-
 			$query        	= implode(" ", $query);
 			$result        	= $this->fetchAll($query);
 			return $result;
 		} else if ($option['task'] == 'relateBook') {
 			$id 		= $arrParam['id'];
 			$list 		= $arrParam['list'];
-			$query[]    = "SELECT `id`,`picture`,`name`,`price`,`category_id`,`description`,`sale_off`";
-			$query[]    = "FROM " . TBL_BOOK . "";
-			$query[]    = "WHERE `category_id` = $list AND `id` != $id";
+			$query[]    = "WHERE `b`.`category_id` = $list AND `b`.`id` != $id";
 			$query[]    = "LIMIT 0,6";
-
-
 			$query        	= implode(" ", $query);
 			$result        	= $this->fetchAll($query);
 			return $result;
@@ -94,6 +82,11 @@ class CategoryModel extends Model
 			$query = "SELECT `id`,`picture`,`name`,`price`,`category_id` FROM " . TBL_BOOK . " WHERE `status` = 'active' AND `special` = 1 ORDER BY `ordering` ASC LIMIT 0,2";
 			$result = $this->fetchAll($query);
 			return $result;
+		}else if ($option['task'] == 'get-category') {
+			$query = "SELECT `id`,`picture`,`name` FROM " . TBL_CATEGORY . " WHERE `status` = 'active' ORDER BY `id` ASC";
+			$result = $this->fetchAll($query);
+			return $result;
+			
 		}
 	}
 
@@ -101,7 +94,7 @@ class CategoryModel extends Model
 	{
 		if ($option['task'] == null) {
 			$id 		= $arrParam['id'];
-			$query 		= "SELECT `id`,`picture`,`name`,`price`,`description`,`sale_off`,`category_id` FROM " . TBL_BOOK . " WHERE `id` = " . $id . "";
+			$query 		= "SELECT `id`,`picture`,`name`,`price`,`description`,`description_main`,`sale_off`,`category_id` FROM " . TBL_BOOK . " WHERE `id` = " . $id . "";
 			$result 	= $this->fetchRow($query);
 			return $result;
 		} else if ($option['task'] == 'related') {

@@ -8,6 +8,7 @@ class IndexController extends FrontendController{
 		$this->_view->topProduct 		= $this->_model->topProduct();
 		$this->_view->topCategory 		= $this->_model->topCategory();
 		$this->_view->topCategoryItems 	= $this->_model->topCategoryItems();
+		$this->_view->slider 			= $this->_model->showSlider();
 
 		$this->_view->render('index/index');
 	}

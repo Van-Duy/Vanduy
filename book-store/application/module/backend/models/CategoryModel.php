@@ -42,9 +42,9 @@ class CategoryModel extends BackendModel
             }
 
             // Fill
-            if (!empty($arrParam['namePost']) && !empty($arrParam['namePostDir'])) {
-                $name         = $arrParam['namePost'];
-                $nameDir     = $arrParam['namePostDir'];
+            if (!empty($arrParam['sort_field']) && !empty($arrParam['sort_order'])) {
+                $name         = $arrParam['sort_field'];
+                $nameDir     = $arrParam['sort_order'];
                 $query[]    = "ORDER BY `$name` $nameDir";
             } else {
                 $query[]    = "ORDER BY `id` desc";
@@ -113,6 +113,23 @@ class CategoryModel extends BackendModel
         if (isset($option['task'])) {
             $number = ($option['task'] == 'active') ? 'active' : 'inactive';
             $query[]     = "AND `status` = '$number'";
+        }
+
+        // FILTER : KEYWORD
+        if (!empty($arrParam['search'])) {
+            $query[]    = "AND (";
+            $keyword    = "'%{$arrParam['search']}%'";
+            foreach ($this->fieldSearchAccepted as $field) {
+                $query[] = "`$field` LIKE $keyword";
+                $query[] = "OR";
+            }
+            array_pop($query);
+            $query[] = ")";
+        }
+
+        // key search showHome
+        if (!empty($arrParam['filter_showHome']) && $arrParam['filter_showHome'] != "default") {
+            $query[]    = "AND `showHome` ='" . $arrParam['filter_showHome'] . "'";
         }
 
         $query        = implode(" ", $query);

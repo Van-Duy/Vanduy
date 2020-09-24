@@ -18,6 +18,7 @@ $linkDatabase   = URL::createLink('backend', 'dashboard', 'index');
 $linkHistory    = URL::createLink('frontend', 'user', 'history','','history.html');
 $linkInfo       = URL::createLink('frontend', 'user', 'info','','info.html');
 $linkPass       = URL::createLink('frontend', 'user', 'changePass','','changePass.html');
+$linkCategoryList = URL::createLink('frontend', 'category', 'category','','category-list.html');
 
 //show danh sách Header
 $categories = XML::getContentXML('categories.xml');
@@ -43,10 +44,10 @@ if ($user['login']) {
 
 
 //create MenuLeft-Header
-$menuLeft   = HtmlFront::createMenuLeft('BookStore', '');
+$menuLeft   = HtmlFront::createMenuLeft('BookStore', $linkHome);
 
 //create MenuRight-Header(TEXT)
-$menuRight   = HtmlFront::createMenuRight(array($linkHome => 'Trang chủ', $linkCategory => 'Sách', '#' => array('name' => 'Danh mục', 'child' => $listCategory)), $this->arrParam['controller']);
+$menuRight   = HtmlFront::createMenuRight(array($linkHome => 'Trang chủ', $linkCategory => 'Sách', $linkCategoryList => array('name' => 'Danh mục', 'child' => $listCategory)), $this->arrParam['controller']);
 
 // creatr Cart
 $cart       = HtmlFront::createCart($linkCart, $this->_dirImg, $sumQuantify);

@@ -3,7 +3,7 @@
 class BookModel extends BackendModel
 {
 
-    private $_columns = array('id', 'name', 'price', 'description', 'picture', 'sale_off', 'special', 'category_id', 'created', 'created_by', 'modified', 'modified_by', 'status', 'ordering');
+    private $_columns = array('id', 'name', 'price', 'description', 'description_main', 'picture', 'sale_off', 'special', 'category_id', 'created', 'created_by', 'modified', 'modified_by', 'status', 'ordering');
 
     private $fieldSearchAccepted = ['id', 'name'];
     public function __construct()
@@ -47,9 +47,9 @@ class BookModel extends BackendModel
         }
 
         // Fill
-        if (!empty($arrParam['namePost']) && !empty($arrParam['namePostDir'])) {
-            $name           = $arrParam['namePost'];
-            $nameDir        = $arrParam['namePostDir'];
+        if (!empty($arrParam['sort_field']) && !empty($arrParam['sort_order'])) {
+            $name           = $arrParam['sort_field'];
+            $nameDir        = $arrParam['sort_order'];
             $query[]        = "ORDER BY `$name` $nameDir";
         } else {
             $query[]        = "ORDER BY `b`.`id` desc";
@@ -112,14 +112,36 @@ class BookModel extends BackendModel
 
     public function countStatus($arrParam, $option  = null)
     {
-        $query[]     = 'SELECT COUNT(`id`) AS `total`';
-        $query[]     = "FROM `$this->table`";
-        $query[]     = "WHERE `id` > 0";
+        $query[]     = 'SELECT COUNT(`b`.`id`) AS `total`';
+        $query[]     = "FROM `$this->table` AS `b` LEFT JOIN `" . TBL_CATEGORY . "` AS c ON `b`.`category_id` = `c`.`id`";
+        $query[]     = "WHERE `b`.`id` > 0";
 
         //Count Active
         if (isset($option['task'])) {
             $number = ($option['task'] == 'active') ? 'active' : 'inactive';
-            $query[]     = "AND `status` = '$number'";
+            $query[]     = "AND `b`.`status` = '$number'";
+        }
+
+        // FILTER : KEYWORD
+        if (!empty($arrParam['search'])) {
+            $query[]    = "AND (";
+            $keyword    = "'%{$arrParam['search']}%'";
+            foreach ($this->fieldSearchAccepted as $field) {
+                $query[] = "`b`.`$field` LIKE $keyword";
+                $query[] = "OR";
+            }
+            array_pop($query);
+            $query[] = ")";
+        }
+
+        // key search special
+        if (isset($arrParam['filter_special']) && $arrParam['filter_special'] != "default") {
+            $query[]    = "AND `b`.`special` ='" . $arrParam['filter_special'] . "'";
+        }
+
+        // key search filter_category_name
+        if (!empty($arrParam['filter_category_name']) && $arrParam['filter_category_name'] != "default") {
+            $query[]    = "AND `c`.`id` ='" . $arrParam['filter_category_name'] . "'";
         }
 
         $query        = implode(" ", $query);
@@ -245,7 +267,7 @@ class BookModel extends BackendModel
     public function infoItem($arrParam, $option = null)
     {
         if ($option == null) {
-            $query[]    = "SELECT `id`,`name`,`picture`,`description`,`price`,`category_id`,`status`,`ordering`,`special`,`sale_off`";
+            $query[]    = "SELECT `id`,`name`,`picture`,`description`,`description_main`,`price`,`category_id`,`status`,`ordering`,`special`,`sale_off`";
             $query[]    = "FROM `$this->table`";
             $query[]    = "WHERE `id` = '" . $arrParam['id'] . "'";
             $query        = implode(" ", $query);

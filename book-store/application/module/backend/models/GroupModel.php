@@ -42,22 +42,20 @@ class GroupModel extends BackendModel
 
 
         // Fill
-        if (!empty($arrParam['namePost']) && !empty($arrParam['namePostDir'])) {
-            $name         = $arrParam['namePost'];
-            $nameDir     = $arrParam['namePostDir'];
-            $query[]    = "ORDER BY `$name` $nameDir";
+        if (!empty($arrParam['sort_field']) && !empty($arrParam['sort_order'])) {
+            $name           = $arrParam['sort_field'];
+            $nameDir        = $arrParam['sort_order'];
+            $query[]        = "ORDER BY `$name` $nameDir";
         } else {
-            $query[]    = "ORDER BY `id` desc";
+            $query[]        = "ORDER BY `id` desc";
         }
 
-
         // pagination
-
-        $pagination                = $arrParam['pagination'];
-        $currentPage             = $pagination['currentPage'];
-        $totalItemsPerPage        = $pagination['totalItemsPerPage'];
-        $position                = ($currentPage - 1) * $totalItemsPerPage;
-        $query[]                = "LIMIT $position, $totalItemsPerPage";
+        $pagination                 = $arrParam['pagination'];
+        $currentPage                = $pagination['currentPage'];
+        $totalItemsPerPage          = $pagination['totalItemsPerPage'];
+        $position                   = ($currentPage - 1) * $totalItemsPerPage;
+        $query[]                    = "LIMIT $position, $totalItemsPerPage";
 
 
 
@@ -89,7 +87,7 @@ class GroupModel extends BackendModel
             $query[]    = "AND `group_acp` =" . $arrParam['filter_group_acp'];
         }
 
-        // key search groupACp
+        // key search statusSearch
         if (!empty($arrParam['statusSearch']) && $arrParam['statusSearch'] != "All") {
             $query[]    = "AND `status` ='" . $arrParam['statusSearch'] . "'";
         }
@@ -109,6 +107,23 @@ class GroupModel extends BackendModel
         if (isset($option['task'])) {
             $number = ($option['task'] == 'active') ? 'active' : 'inactive';
             $query[]     = "AND `status` = '$number'";
+        }
+
+        // FILTER : KEYWORD
+        if (!empty($arrParam['search'])) {
+            $query[] = "AND (";
+            $keyword    = "'%{$arrParam['search']}%'";
+            foreach ($this->fieldSearchAccepted as $field) {
+                $query[] = "`$field` LIKE $keyword";
+                $query[] = "OR";
+            }
+            array_pop($query);
+            $query[] = ")";
+        }
+
+        // key search groupACp
+        if (isset($arrParam['filter_group_acp']) && $arrParam['filter_group_acp'] != 'default') {
+            $query[]    = "AND `group_acp` =" . $arrParam['filter_group_acp'];
         }
 
         $query        = implode(" ", $query);
@@ -150,7 +165,7 @@ class GroupModel extends BackendModel
 
     public function saveItem($arrParam, $option = null)
     {
-       
+
         if ($option['task'] == 'add') {
             $arrParam['form']['created']        = $this->_time;
             $arrParam['form']['created_by']     = $this->_user;

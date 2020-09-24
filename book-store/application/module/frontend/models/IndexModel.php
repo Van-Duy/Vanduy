@@ -45,9 +45,16 @@ class IndexModel extends Model
 		$resultO = $this->fetchAll($query);
 		foreach ($resultO as $value) {
 			$id = $value['id'];
-			$queryN = "SELECT `id`,`picture`,`name`,`description`,`price`,`sale_off`,`category_id` FROM " . TBL_BOOK . " WHERE `status` = 'active'AND `category_id` = $id LIMIT 0,8";
+			$queryN = "SELECT `b`.`id`,`b`.`picture`,`b`.`name`,`b`.`description`,`b`.`price`,`b`.`category_id`,`b`.`sale_off`,`c`.`name` AS `category_name` FROM " . TBL_BOOK . " AS `b` LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id` WHERE `b`.`status` = 'active'AND `b`.`category_id` = $id LIMIT 0,4";
 			$result[$id] = $this->fetchAll($queryN);
 		}
+		return $result;
+	}
+
+	public function showSlider()
+	{
+		$query = "SELECT `id`,`name`,`thumb`,`status` FROM " . TBL_SLIDER . " WHERE `status` = 'active' LIMIT 0,4";
+		$result = $this->fetchAll($query);
 		return $result;
 	}
 
@@ -101,10 +108,11 @@ class IndexModel extends Model
 	{
 		if ($option == null) {
 			$id = $arrParam['id'];
-			$query = "SELECT `id`,`picture`,`name`,`description`,`price`,`category_id`,`sale_off` FROM " . TBL_BOOK . " WHERE `status` = 'active'AND `id` = $id";
+			$query = "SELECT `b`.`id`,`b`.`picture`,`b`.`name`,`b`.`description`,`b`.`price`,`b`.`category_id`,`b`.`sale_off`,`c`.`name` AS `category_name` FROM `" . TBL_BOOK . "` AS `b` LEFT JOIN `" . TBL_CATEGORY . "` AS c ON `b`.`category_id` = `c`.`id` WHERE `b`.`status` = 'active'AND `b`.`id` = $id";
 			$result = $this->fetchRow($query);
 			$result['src']   		= Html::createImageSrc($result['picture'], $result['picture'], 'book', '252x323-', array('height' => 252, 'min-height' => 323));
-			$result['linkretail'] 	= URL::createLink('frontend', 'category', 'list', ['list' => $result['category_id'], 'id' => $id]);
+			$link 					= URL::filterURL("$result[category_name]") . "/" . URL::filterURL("$result[name]") . "-$result[category_id]-$result[id].html";
+			$result['linkretail'] 	= URL::createLink('frontend', 'category', 'list', ['list' => $result['category_id'], 'id' => $id],$link);
 
 			return $result;
 		}

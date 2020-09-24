@@ -4,6 +4,7 @@ class CategoryController extends FrontendController
 	// ACTION: INDEX
 	public function indexAction()
 	{
+		$this->_view->_title 	= '123';
 		$this->setPagination(['totalItemsPerPage'	=> 8, 'pageRange' => 3]);
 		$this->_view->Items 	= $this->_model->showItems($this->_arrParam);
 		$this->_view->TopItems 	= $this->_model->showItems($this->_arrParam, array('task' => 'topItems'));
@@ -22,5 +23,12 @@ class CategoryController extends FrontendController
 		$this->_view->NewItems 		= $this->_model->showItems($this->_arrParam, array('task' => 'newItems'));
 
 		$this->_view->render('category/list');
+	}
+
+	public function categoryAction()
+	{
+		$this->_view->categoryList 	= $this->_model->showCategory($this->_arrParam, array('task' => 'get-category'));
+
+		$this->_view->render('category/category');
 	}
 }

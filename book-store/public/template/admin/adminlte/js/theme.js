@@ -3,30 +3,66 @@ $(document).ready(function () {
     var moduleName = searchParams.get('module');
     var controllerName = searchParams.get('controller');
 
+    // Search 
+    $('#btn-search').click(function (e) {
+        e.preventDefault();
+        value = $('input[name=search]').val()
+        if (value != '') {
+            let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'search'];
+            let link = createLink(exceptParams);
+            link += `search=${value}`;
+            window.location.href = link;
+        } else {
+            toastr.error('Nhập nội dung cần tìm kiếm', 'Thực hiện!')
+        }
+    });
 
     // filter_category_name
     $('select[name=filter_category_name]').change(function (e) {
-        $('#filter-bar').submit();
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'filter_category_name'];
+        let link = createLink(exceptParams);
+        link += `filter_category_name=${$(this).val()}`;
+        window.location.href = link;
     });
 
     // filter_group_name
     $('select[name=filter_group_name]').change(function (e) {
-        $('#filter-bar').submit();
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'filter_group_name'];
+        let link = createLink(exceptParams);
+        link += `filter_group_name=${$(this).val()}`;
+        window.location.href = link;
     });
 
     // filter_showHome
     $('select[name=filter_showHome]').change(function (e) {
-        $('#filter-bar').submit();
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'filter_showHome'];
+        let link = createLink(exceptParams);
+        link += `filter_showHome=${$(this).val()}`;
+        window.location.href = link;
     });
 
     // filter_special
     $('select[name=filter_special]').change(function (e) {
-        $('#filter-bar').submit();
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'filter_special'];
+        let link = createLink(exceptParams);
+        link += `filter_special=${$(this).val()}`;
+        window.location.href = link;
+    });
+
+    // filter_sstatus
+    $('select[name=status]').change(function (e) {
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'status'];
+        let link = createLink(exceptParams);
+        link += `status=${$(this).val()}`;
+        window.location.href = link;
     });
 
     // group_acp
-    $('#filter-bar select[name=filter_group_acp]').change(function (e) {
-        $('#filter-bar').submit();
+    $('select[name=filter_group_acp]').change(function (e) {
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'filter_group_acp'];
+        let link = createLink(exceptParams);
+        link += `filter_group_acp=${$(this).val()}`;
+        window.location.href = link;
     });
 
     // show ?check
@@ -188,6 +224,21 @@ $(document).ready(function () {
         );
     });
 
+    //thay đổi status : name
+    $('select[name=status_name]').change(function (e) {
+        var id = $(this).attr('id');
+        var value = $(this).val();
+        var link = 'index.php?module=' + moduleName + '&controller=' + controllerName + '&action=changeStatusName';
+        $.get(link, {
+                'id': id,
+                'value': value
+            },
+            function (data) {
+                toastr.success('Đã thay đổi thành công', 'Thành công!')
+            }
+        );
+    });
+
     // ẩn thông báo
     $('#alert').fadeOut(5000);
 
@@ -205,6 +256,11 @@ $(document).ready(function () {
                 window.location.href = link;
             }
         })
+    }
+
+    // viewCart single
+    viewCart = function (link) {
+        window.location.href = link;
     }
 
     // click checkAll
@@ -225,7 +281,9 @@ $(document).ready(function () {
     // clear
     $('#btn-clear-search').click(function (e) {
         $('input[name=search]').val('');
-        $('#filter-bar').submit();
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'search'];
+        let link = createLink(exceptParams);
+        window.location.href = link;
     });
 
     // form
@@ -235,15 +293,21 @@ $(document).ready(function () {
     }
 
     // fillStatus
-    fillStatus = function (link) {
-        $('input[name=statusSearch]').val(link);
-        $('#filter-bar').submit();
-    }
+    $('.fillStatus').click(function (e) {
+        e.preventDefault();
+        value = $(this).attr('data');
+        let exceptParams = ['filter_page', 'sort_field', 'sort_order', 'statusSearch'];
+        let link = createLink(exceptParams);
+        link += `statusSearch=${value}`;
+        window.location.href = link;
+
+    });
+
 
     // fillColum
     sortList = function (colum, oder) {
-        $('input[name=namePost]').val(colum);
-        $('input[name=namePostDir]').val(oder);
+        $('input[name=sort_field]').val(colum);
+        $('input[name=sort_order]').val(oder);
         $('#filter-bar').submit();
     };
 });
@@ -253,7 +317,7 @@ function createLink(exceptParams) {
     let searchParams = new URLSearchParams(window.location.search);
     let searchParamsEntries = searchParams.entries();
 
-    let link = pathname + '&';
+    let link = pathname + '?';
     for (let pair of searchParamsEntries) {
         if (exceptParams.indexOf(pair[0]) == -1) {
             link += `${pair[0]}=${pair[1]}&`;

@@ -1,7 +1,7 @@
 <?php
 class Html
 {
-     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
     //                      backend 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
@@ -25,7 +25,7 @@ class Html
                         break;
                 }
                 $class = ($status == $key) ? "info" : "secondary";
-                $html .= '<a href="javascript:fillStatus(\'' . $link . '\')" class="mr-1 btn btn-sm btn-' . $class . '">' . $name . '<span class="badge badge-pill badge-light">' . $value . '</span></a>';
+                $html .= '<a href="#" data="'.$link.'" class="fillStatus mr-1 btn btn-sm btn-' . $class . '">' . $name . '<span class="badge badge-pill badge-light">' . $value . '</span></a>';
             }
         }
         return $html;
@@ -68,7 +68,7 @@ class Html
                 $activeP = 'active';
             }
             $html = '   <li class="nav-item "> 
-                            <a href="' . $parent['link'] . '" class="nav-link '.$activeP.'">
+                            <a href="' . $parent['link'] . '" class="nav-link ' . $activeP . '">
                                 <i class="nav-icon fas fa-' . $parent['icon'] . '"></i>
                                 <p>' . $parent['name'] . '</p>
                             </a>
@@ -91,9 +91,9 @@ class Html
     }
 
     //create input (form)
-    public static function cmsInput($name, $type, $class, $value = null,$id = "")
+    public static function cmsInput($name, $type, $class, $value = null, $id = "")
     {
-        $html = '<input type="' . $type . '" id="' .$name.'-'. $id . '" name="' . $name . '" value="' . $value . '" class="form-control form-control-sm" ' . $class . '>';
+        $html = '<input type="' . $type . '" id="' . $name . '-' . $id . '" name="' . $name . '" value="' . $value . '" class="form-control form-control-sm" ' . $class . '>';
         return $html;
     }
 
@@ -173,16 +173,17 @@ class Html
     }
 
     // creat input - dashboar
-	public static function creatInputDas($name,$link,$icon,$member){
-		$html    = ' <div class="col-lg-3 col-6"><div class="small-box bg-warning"><div class="inner">';
-		$html   .= '<h3>'.$member.'</h3>';
-		$html   .= '<p>'.$name.'</p></div>';
-		$html   .= '<div class="icon text-white"><i class="ion ion-'.$icon.'"></i></div>';
-		$html   .= '<a href="'.$link.'" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>';
-		$html   .= '</div></div>';
-		return $html;
+    public static function creatInputDas($name, $link, $icon, $member)
+    {
+        $html    = ' <div class="col-lg-3 col-6"><div class="small-box bg-warning"><div class="inner">';
+        $html   .= '<h3>' . $member . '</h3>';
+        $html   .= '<p>' . $name . '</p></div>';
+        $html   .= '<div class="icon text-white"><i class="ion ion-' . $icon . '"></i></div>';
+        $html   .= '<a href="' . $link . '" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>';
+        $html   .= '</div></div>';
+        return $html;
     }
-    
+
     //show action
     public static function showActionButton($moduleName, $controllerName, $id)
     {
@@ -217,42 +218,43 @@ class Html
         return $xhtml;
     }
 
-    
+
     // createImage
-	public static function createImage($value,$namePicture,$file,$moreName = "",$arr = null){
-        if(!empty($arr)){
+    public static function createImage($value, $namePicture, $file, $moreName = "", $arr = null)
+    {
+        if (!empty($arr)) {
             $str = '';
-            foreach($arr AS $key => $value){
-                 $str .= $key . ':' . $value . 'px;';
+            foreach ($arr as $key => $value) {
+                $str .= $key . ':' . $value . 'px;';
             }
         }
-        if($namePicture != null){
-            $srcP                       = UPLOAD_URL . $file . DS . $moreName .$namePicture;
-            $pictureSingle              = '<img class="img-responsive" src="'.$srcP.'" alt="'.$namePicture.'" style="'.$str.'0">';
-        }else{
+        if ($namePicture != null) {
+            $srcP                       = UPLOAD_URL . $file . DS . $moreName . $namePicture;
+            $pictureSingle              = '<img class="img-responsive" src="' . $srcP . '" alt="' . $namePicture . '" style="' . $str . '0">';
+        } else {
             $srcP                       = UPLOAD_URL . $file . DS . "" . 'default.jpg';
-            $pictureSingle              = '<img  class="img-responsive" src="'.$srcP.'" alt="'.$namePicture.'" style="max-width: 60px;max-height: 60px;">';
+            $pictureSingle              = '<img  class="img-responsive" src="' . $srcP . '" alt="' . $namePicture . '" style="max-width: 60px;max-height: 60px;">';
         }
         return $pictureSingle;
-        
-    } 
+    }
 
     // createImage - src
-	public static function createImageSrc($value,$namePicture,$file,$moreName = "",$arr = null){
-        if($namePicture != null){
-            $srcP                       = UPLOAD_URL . $file . DS . $moreName .$namePicture;
-        }else{
+    public static function createImageSrc($value, $namePicture, $file, $moreName = "", $arr = null)
+    {
+        if ($namePicture != null) {
+            $srcP                       = UPLOAD_URL . $file . DS . $moreName . $namePicture;
+        } else {
             $srcP                       = UPLOAD_URL . $file . DS . "" . 'default.jpg';
         }
         return $srcP;
-        
-    } 
+    }
 
     // create - button -action
-	public static function createButtonAction($arr){
+    public static function createButtonAction($arr)
+    {
         $html = "";
-        if(!empty($arr)){
-            foreach($arr AS $key => $value){
+        if (!empty($arr)) {
+            foreach ($arr as $key => $value) {
                 switch ($key) {
                     case 'changePass':
                         $color = "default";
@@ -275,38 +277,29 @@ class Html
                         $icon = "";
                         break;
                 }
-        $html .= '<a href="'.$value.'" class="rounded-circle btn btn-sm btn-'.$color.'" title="'.$key.'">
-                        <i class="fas fa-'.$icon.'"></i>
+                $html .= '<a href="' . $value . '" class="rounded-circle btn btn-sm btn-' . $color . '" title="' . $key . '">
+                        <i class="fas fa-' . $icon . '"></i>
                     </a> ';
             }
         }
         return $html;
-        
-    } 
-    
-    //   // createscript - showmassage
-	// public static function createShowMessage(){
-    //     $html = "   <script>
-    //                     $message  = Session::get('message');
-    //                     if(isset($message)){
-    //                         echo "toastr.".$message['class']."('".$message['content']."', 'Thực hiện!')";
-    //                     }
-    //                     Session::delete('message');
-    //                 </script>";
-        
-    // } 
-
-
-
-
- 
+    }
 
     
-
-    
-    
-
 
    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

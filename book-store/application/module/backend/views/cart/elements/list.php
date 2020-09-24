@@ -1,19 +1,18 @@
-<?php 
-$linkReload = URL::createLink($module,$controller,$action);
-$linkAddNew = URL::createLink($module,$controller,'form');
+<?php
+$linkReload = URL::createLink($module, $controller, $action);
+$linkAddNew = URL::createLink($module, $controller, 'form');
 
 // Select Muti
-$arrMuti  = array('default' => "--Bulk Action--","multi-active" => "Multi Active",'multi-inactive' => 'Multi Inactive','multi-delete' => 'Multi Delete');
-$Muti     = Helper::creatStatus('bulk-action','custom-select custom-select-sm mr-1',$arrMuti,$this->arrParam["bulk-action"],'width: unset',"bulk-action");
+$arrMuti  = array('default' => "--Bulk Action--", 'multi-delete' => 'Multi Delete');
+$Muti     = Helper::creatStatus('bulk-action', 'custom-select custom-select-sm mr-1', $arrMuti, $this->arrParam["bulk-action"], 'width: unset', "bulk-action");
 
 // Colum
-$Order          = Html::creatFill('Order','Order',$this->arrParam['namePost'],$this->arrParam['namePostDir']);
-$Info           = Html::creatFill('Info','Info',$this->arrParam['namePost'],$this->arrParam['namePostDir']);
-$Status         = Html::creatFill('Status','status',$this->arrParam['namePost'],$this->arrParam['namePostDir']);
-$Created        = Html::creatFill('Date-Buy','Date-Buy',$this->arrParam['namePost'],$this->arrParam['namePostDir']);
-$Modified       = Html::creatFill('Modified','modified',$this->arrParam['namePost'],$this->arrParam['namePostDir']);
+$id             = Html::creatFill('ID', 'id', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$username       = Html::creatFill('Username', 'username', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Time           = Html::creatFill('Time', 'Date-Buy', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
+$Status         = Html::creatFill('Status', 'modified', $this->arrParam['sort_field'], $this->arrParam['sort_order']);
 
-$colum = $Order . $Status .  $Info .  $Group_name .  $Created .  $Modified ;
+$colum = $id . $username  .  $Status .  $Time;
 
 ?>
 <div class="card card-info card-outline">
@@ -26,13 +25,11 @@ $colum = $Order . $Status .  $Info .  $Group_name .  $Created .  $Modified ;
     </div>
     <div class="card-body">
         <!-- Control -->
-
         <div class="d-flex flex-wrap align-items-center justify-content-between mb-2">
             <div class="mb-1">
-                <?php echo $Muti ; ?>
+                <?php echo $Muti; ?>
                 <button id="bulk-apply" class="btn btn-sm btn-info">Apply <span class="badge badge-pill badge-danger navbar-badge" style="display: none"></span></button>
             </div>
-            <a href="<?php echo $linkAddNew; ?>" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Add New</a>
         </div>
         <!-- List Content -->
         <form action="" method="post" class="table-responsive" id="form-table">
